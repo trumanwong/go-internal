@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/bwmarrin/snowflake"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"math"
 	"net/http"
 	"os"
@@ -172,4 +173,34 @@ func HtmlSpecialCharsDecode(s string) string {
 func ValidPhone(s string) bool {
 	result, _ := regexp.MatchString(`^(1[3-9]\d{9})$`, s)
 	return result
+}
+
+// ScopePaginate 分页查询
+func ScopePaginate(params map[string]interface{}) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		if _, ok := params["export"]; ok && params["export"] == "1" {
+			return db
+		}
+		page := 1
+		if _, ok := params["page"]; ok {
+			page, _ = strconv.Atoi(params["page"].(string))
+		}
+		if page <= 0 {
+			page = 1
+		}
+
+		perPage := 10
+		if _, ok := params["per_page"]; ok {
+			perPage, _ = strconv.Atoi(params["per_page"].(string))
+		}
+		switch {
+		case perPage > 100:
+			perPage = 100
+		case perPage <= 0:
+			perPage = 10
+		}
+
+		offset := (page - 1) * perPage
+		return db.Offset(offset).Limit(perPage)
+	}
 }

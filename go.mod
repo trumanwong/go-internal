@@ -1,4 +1,4 @@
-module go-library
+module github.com/trumanwong/go-library
 
 go 1.17
 

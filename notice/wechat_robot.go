@@ -5,13 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 	"time"
 )
 
-func PushWeChatRobot(level, message, url string) {
+func PushWeChatRobot(level, message, url string) ([]byte, error) {
 	messages, params := make([]string, 0), make(map[string]interface{})
 	messages = append(messages, fmt.Sprintf("- 时间：%s", time.Now().Format("2006-01-02 15:04:05")))
 	messages = append(messages, fmt.Sprintf("- Level：%s", level))
@@ -25,16 +24,13 @@ func PushWeChatRobot(level, message, url string) {
 	data, _ := json.Marshal(params)
 	request, err := http.NewRequest("POST", url, bytes.NewReader(data))
 	if err != nil {
-		log.Printf("NewRequest fail, %s", err)
-		return
+		return nil, err
 	}
 	request.Header.Set("Content-Type", "application/json")
 	client := http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
-		log.Printf("Request WeChat Api fail, %s", err)
-		return
+		return nil, err
 	}
-	readAll, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println(string(readAll))
+	return ioutil.ReadAll(resp.Body)
 }

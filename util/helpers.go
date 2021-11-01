@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/bwmarrin/snowflake"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"math"
 	"net"
@@ -259,4 +260,9 @@ func Long2Ip(ipLong uint32) string {
 	binary.BigEndian.PutUint32(ipByte, ipLong)
 	ip := net.IP(ipByte)
 	return ip.String()
+}
+
+// GenerateUUID 生成uuid
+func GenerateUUID() string {
+	return uuid.NewString()
 }

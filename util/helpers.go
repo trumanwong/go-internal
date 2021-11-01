@@ -1,15 +1,19 @@
 package util
 
 import (
+	"bytes"
 	"crypto/md5"
+	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"github.com/bwmarrin/snowflake"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"math"
+	"net"
 	"net/http"
 	"os"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -203,4 +207,56 @@ func ScopePaginate(params map[string]interface{}) func(db *gorm.DB) *gorm.DB {
 		offset := (page - 1) * perPage
 		return db.Offset(offset).Limit(perPage)
 	}
+}
+
+func InArray(needle interface{}, haystack interface{}) bool {
+	val := reflect.ValueOf(haystack)
+	switch val.Kind() {
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < val.Len(); i++ {
+			if reflect.DeepEqual(needle, val.Index(i).Interface()) {
+				return true
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			if reflect.DeepEqual(needle, val.MapIndex(k).Interface()) {
+				return true
+			}
+		}
+	default:
+		panic("haystack: haystack type muset be slice, array or map")
+	}
+
+	return false
+}
+
+func Implode(glue string, pieces []string) string {
+	var buf bytes.Buffer
+	l := len(pieces)
+	for _, str := range pieces {
+		buf.WriteString(str)
+		if l--; l > 0 {
+			buf.WriteString(glue)
+		}
+	}
+	return buf.String()
+}
+
+// IP2long ip2long()
+// IPv4
+func IP2long(ipAddress string) uint32 {
+	ip := net.ParseIP(ipAddress)
+	if ip == nil {
+		return 0
+	}
+	return binary.BigEndian.Uint32(ip.To4())
+}
+
+// Long2Ip 整型转ip
+func Long2Ip(ipLong uint32) string {
+	ipByte := make([]byte, 4)
+	binary.BigEndian.PutUint32(ipByte, ipLong)
+	ip := net.IP(ipByte)
+	return ip.String()
 }

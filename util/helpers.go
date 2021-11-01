@@ -266,3 +266,12 @@ func Long2Ip(ipLong uint32) string {
 func GenerateUUID() string {
 	return uuid.NewString()
 }
+
+// CreatePath 创建目录
+func CreatePath(path string) error {
+	_, err := os.Stat(path)
+	if err != nil && !os.IsExist(err) {
+		err = os.MkdirAll(path, os.ModePerm)
+	}
+	return err
+}

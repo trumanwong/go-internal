@@ -12,7 +12,6 @@ import (
 	"gorm.io/gorm"
 	"math"
 	"net"
-	"net/http"
 	"os"
 	"reflect"
 	"regexp"
@@ -22,7 +21,7 @@ import (
 )
 
 func Response(context *gin.Context, data interface{}, code int, message string) {
-	context.JSON(http.StatusOK, gin.H{
+	context.JSON(code, gin.H{
 		"message": message,
 		"data":    data,
 		"code":    code,

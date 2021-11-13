@@ -54,8 +54,8 @@ func (this *Client) ListObjects(prefix string) ([]oss.ObjectProperties, error) {
 }
 
 // GetSignUrl 获取签名链接
-func (this *Client) GetSignUrl(objectName string) (string, error) {
-	signedUrl, err := this.bucket.SignURL(objectName, oss.HTTPGet, 3600 * 8)
+func (this *Client) GetSignUrl(objectName string, method oss.HTTPMethod, expiredInSec int64) (string, error) {
+	signedUrl, err := this.bucket.SignURL(objectName, method, expiredInSec)
 	if err != nil {
 		return "", err
 	}

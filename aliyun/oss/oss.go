@@ -1,16 +1,16 @@
-package util
+package oss
 
 import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"io"
 )
 
-type AliOss struct {
+type Client struct {
 	client *oss.Client
 	bucket *oss.Bucket
 }
 
-func NewAliOss(endpoint, accessKeyId, accessKeySecret, bucketName string) (*AliOss, error) {
+func NewClient(endpoint, accessKeyId, accessKeySecret, bucketName string) (*Client, error) {
 	// 获取OSSClient实例
 	client, err := oss.New(endpoint, accessKeyId, accessKeySecret)
 	if err != nil {
@@ -21,17 +21,17 @@ func NewAliOss(endpoint, accessKeyId, accessKeySecret, bucketName string) (*AliO
 	if err != nil {
 		return nil, err
 	}
-	return &AliOss{client: client, bucket: bucket}, nil
+	return &Client{client: client, bucket: bucket}, nil
 }
 
-// put文件至OSS
-func (this *AliOss) PutObject(objectName string, reader io.Reader, options ...oss.Option) error {
+// PutObject put文件至OSS
+func (this *Client) PutObject(objectName string, reader io.Reader, options ...oss.Option) error {
 	err := this.bucket.PutObject(objectName, reader)
 	return err
 }
 
 // ListObjects 列举文件
-func (this *AliOss) ListObjects(prefix string) ([]oss.ObjectProperties, error) {
+func (this *Client) ListObjects(prefix string) ([]oss.ObjectProperties, error) {
 	fileList := make([]oss.ObjectProperties, 0)
 	marker := ""
 	for {
@@ -54,7 +54,7 @@ func (this *AliOss) ListObjects(prefix string) ([]oss.ObjectProperties, error) {
 }
 
 // GetSignUrl 获取签名链接
-func (this *AliOss) GetSignUrl(objectName string) (string, error) {
+func (this *Client) GetSignUrl(objectName string) (string, error) {
 	signedUrl, err := this.bucket.SignURL(objectName, oss.HTTPGet, 3600 * 8)
 	if err != nil {
 		return "", err
@@ -63,7 +63,7 @@ func (this *AliOss) GetSignUrl(objectName string) (string, error) {
 }
 
 // DeleteObjects 删除对象
-func (this *AliOss) DeleteObjects(objects []string) error {
+func (this *Client) DeleteObjects(objects []string) error {
 	_, err := this.bucket.DeleteObjects(objects)
 	if err != nil {
 		return err

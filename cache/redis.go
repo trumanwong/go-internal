@@ -2,7 +2,6 @@ package cache
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/go-redis/redis/v8"
 	"time"
 )
@@ -49,8 +48,7 @@ func (this *Redis) Get(key string, prefix string) (res string, err error) {
 }
 
 func (this *Redis) Set(key string, value interface{}, expiration time.Duration, prefix string) (res string, err error) {
-	jsonStr, err := json.Marshal(value)
-	res, err = this.rdb.Set(this.ctx, getKey(key, prefix), jsonStr, expiration*time.Second).Result()
+	res, err = this.rdb.Set(this.ctx, getKey(key, prefix), value, expiration*time.Second).Result()
 	return
 }
 

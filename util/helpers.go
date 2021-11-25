@@ -9,6 +9,7 @@ import (
 	"github.com/bwmarrin/snowflake"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"math"
 	"net"
@@ -273,4 +274,20 @@ func CreatePath(path string) error {
 		err = os.MkdirAll(path, os.ModePerm)
 	}
 	return err
+}
+
+func PasswordHash(password string) (string, error) {
+	fromPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	return string(fromPassword), err
+}
+
+func PasswordVerify(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
+// CheckValidPhone 验证手机号码是否合法
+func CheckValidPhone(phone string) bool {
+	exp := regexp.MustCompile(`^(13|14|15|16|17|18|19)[0-9]{9}$`)
+	return exp.MatchString(phone)
 }

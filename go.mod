@@ -3,8 +3,10 @@ module github.com/trumanwong/go-library
 go 1.17
 
 require (
-	github.com/alibabacloud-go/darabonba-openapi v0.1.3
+	github.com/alibabacloud-go/darabonba-openapi v0.1.7
+	github.com/alibabacloud-go/dysmsapi-20170525/v2 v2.0.7
 	github.com/alibabacloud-go/imageseg-20191230/v2 v2.0.0
+	github.com/alibabacloud-go/tea v1.1.15
 	github.com/aliyun/aliyun-oss-go-sdk v1.9.8
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/elastic/go-elasticsearch/v7 v7.15.1
@@ -13,15 +15,15 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/qiniu/go-sdk/v7 v7.11.0
 	github.com/streadway/amqp v1.0.0
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	gorm.io/gorm v1.22.2
 )
 
 require (
 	github.com/alibabacloud-go/debug v0.0.0-20190504072949-9472017b5c68 // indirect
 	github.com/alibabacloud-go/endpoint-util v1.1.0 // indirect
-	github.com/alibabacloud-go/openapi-util v0.0.7 // indirect
+	github.com/alibabacloud-go/openapi-util v0.0.8 // indirect
 	github.com/alibabacloud-go/openplatform-20191219 v1.1.7 // indirect
-	github.com/alibabacloud-go/tea v1.1.15 // indirect
 	github.com/alibabacloud-go/tea-fileform v1.1.1 // indirect
 	github.com/alibabacloud-go/tea-oss-sdk v1.1.3 // indirect
 	github.com/alibabacloud-go/tea-oss-utils v1.1.0 // indirect
@@ -49,7 +51,6 @@ require (
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/tjfoc/gmsm v1.3.2 // indirect
 	github.com/ugorji/go/codec v1.1.7 // indirect
-	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
 	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781 // indirect
 	golang.org/x/sys v0.0.0-20211020174200-9d6173849985 // indirect
 	golang.org/x/text v0.3.7 // indirect

@@ -55,3 +55,8 @@ func (this *Cache) Forget(key string) (int64, error) {
 	count, err := this.redis.Del(key, this.prefix)
 	return count, err
 }
+
+// Exists 是否存在key
+func (this *Cache) Exists(key string) (bool, error) {
+	return this.redis.Exists(key, this.prefix)
+}

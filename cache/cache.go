@@ -17,33 +17,41 @@ func NewCache(addr, password string, prefix string, database int) *Cache {
 }
 
 // Get 读取缓存
-func (this *Cache) Get(key string) (res string) {
-	res, _ = this.redis.Get(key, this.prefix)
+func (this *Cache) Get(key string) (res string, err error) {
+	res, err = this.redis.Get(key, this.prefix)
 	return
 }
 
-func (this *Cache) GetNoPrefix(key string) (res string) {
-	res, _ = this.redis.Get(key, "")
+func (this *Cache) GetNoPrefix(key string) (res string, err error) {
+	res, err = this.redis.Get(key, "")
 	return
 }
 
 // Put 写入缓存
-func (this *Cache) Put(key string, value interface{}, expiration time.Duration) {
-	this.redis.Set(key, value, expiration, this.prefix)
+func (this *Cache) Put(key string, value interface{}, expiration time.Duration) (string, error) {
+	res, err := this.redis.Set(key, value, expiration, this.prefix)
+	return res, err
 }
 
-func (this *Cache) Remember(key string, callback Callback, expiration time.Duration) string {
-	res := this.Get(key)
+func (this *Cache) Remember(key string, callback Callback, expiration time.Duration) (string, error) {
+	res, err := this.Get(key)
+	if err != nil {
+		return "", err
+	}
 	if len(res) > 0 {
-		return res
+		return res, nil
 	}
 	value := callback()
-	this.Put(key, value, expiration)
-	res = this.Get(key)
-	return res
+	res, err = this.Put(key, value, expiration)
+	if err != nil {
+		return "", err
+	}
+	res, err = this.Get(key)
+	return res, err
 }
 
 // Forget 删除key
-func (this *Cache) Forget(key string) {
-	this.redis.Del(key, this.prefix)
+func (this *Cache) Forget(key string) (int64, error) {
+	count, err := this.redis.Del(key, this.prefix)
+	return count, err
 }

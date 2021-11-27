@@ -12,6 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"math"
+	"math/rand"
 	"net"
 	"os"
 	"reflect"
@@ -290,4 +291,20 @@ func PasswordVerify(password, hash string) bool {
 func CheckValidPhone(phone string) bool {
 	exp := regexp.MustCompile(`^(13|14|15|16|17|18|19)[0-9]{9}$`)
 	return exp.MatchString(phone)
+}
+
+// GetRandCode 生成随机码
+func GetRandCode(n int) (result string) {
+	chars := "ABCDEFGHIJKMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz0123456789"
+	charsLen := len(chars)
+	if n > 10 {
+		n = 10
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < n; i++ {
+		randIndex := rand.Intn(charsLen)
+		result += chars[randIndex : randIndex+1]
+	}
+	return result
 }

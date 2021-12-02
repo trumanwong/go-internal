@@ -28,6 +28,10 @@ func (this *RabbitMQ) Close() {
 	this.conn.Close()
 }
 
+func (this *RabbitMQ) CheckIsClosed() bool {
+	return this.conn.IsClosed()
+}
+
 func (this *RabbitMQ) NewChannel() (*amqp.Channel, error) {
 	if this.conn.IsClosed() {
 		// 判断是否关闭，如果关闭，重连

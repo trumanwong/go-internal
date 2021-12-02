@@ -308,3 +308,9 @@ func GetRandCode(n int) (result string) {
 	}
 	return result
 }
+
+// CheckValidEmail 检查邮箱是否合法
+func CheckValidEmail(email string) bool {
+	exp := regexp.MustCompile(`\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*`)
+	return exp.MatchString(email)
+}

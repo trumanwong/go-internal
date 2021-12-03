@@ -11,9 +11,11 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"io"
 	"math"
 	"math/rand"
 	"net"
+	"net/http"
 	"os"
 	"reflect"
 	"regexp"
@@ -313,4 +315,30 @@ func GetRandCode(n int) (result string) {
 func CheckValidEmail(email string) bool {
 	exp := regexp.MustCompile(`\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*`)
 	return exp.MatchString(email)
+}
+
+func Download(url, savePath string) error {
+	if PathExists(savePath) {
+		return nil
+	}
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	segments := strings.Split(savePath, "/")
+	path := strings.Join(segments[:len(segments)-1], "/")
+	if !PathExists(path) {
+		err = os.MkdirAll(path, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+	file, err := os.Create(savePath)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(file, resp.Body)
+	return err
 }

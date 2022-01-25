@@ -3,10 +3,11 @@ module github.com/trumanwong/go-internal
 go 1.17
 
 require (
-	github.com/alibabacloud-go/darabonba-openapi v0.1.7
+	github.com/alibabacloud-go/darabonba-openapi v0.1.14
+	github.com/alibabacloud-go/dypnsapi-20170525 v1.0.5
 	github.com/alibabacloud-go/dysmsapi-20170525/v2 v2.0.7
 	github.com/alibabacloud-go/imageseg-20191230/v2 v2.0.0
-	github.com/alibabacloud-go/tea v1.1.15
+	github.com/alibabacloud-go/tea v1.1.17
 	github.com/aliyun/aliyun-oss-go-sdk v1.9.8
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/elastic/go-elasticsearch/v7 v7.15.1
@@ -20,16 +21,17 @@ require (
 )
 
 require (
+	github.com/alibabacloud-go/alibabacloud-gateway-spi v0.0.2 // indirect
 	github.com/alibabacloud-go/debug v0.0.0-20190504072949-9472017b5c68 // indirect
 	github.com/alibabacloud-go/endpoint-util v1.1.0 // indirect
-	github.com/alibabacloud-go/openapi-util v0.0.8 // indirect
+	github.com/alibabacloud-go/openapi-util v0.0.10 // indirect
 	github.com/alibabacloud-go/openplatform-20191219 v1.1.7 // indirect
 	github.com/alibabacloud-go/tea-fileform v1.1.1 // indirect
 	github.com/alibabacloud-go/tea-oss-sdk v1.1.3 // indirect
 	github.com/alibabacloud-go/tea-oss-utils v1.1.0 // indirect
 	github.com/alibabacloud-go/tea-rpc v1.1.8 // indirect
 	github.com/alibabacloud-go/tea-rpc-utils v1.1.2 // indirect
-	github.com/alibabacloud-go/tea-utils v1.3.9 // indirect
+	github.com/alibabacloud-go/tea-utils v1.4.3 // indirect
 	github.com/alibabacloud-go/tea-xml v1.1.1 // indirect
 	github.com/aliyun/credentials-go v1.1.2 // indirect
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect

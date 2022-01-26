@@ -33,11 +33,8 @@ func (this *Cache) Put(key string, value interface{}, expiration time.Duration) 
 	return res, err
 }
 
-func (this *Cache) Remember(key string, callback Callback, expiration time.Duration) (string, error) {
-	res, err := this.Get(key)
-	if err != nil {
-		return "", err
-	}
+func (this *Cache) Remember(key string, callback Callback, expiration time.Duration) (res string, err error) {
+	res, err = this.Get(key)
 	if len(res) > 0 {
 		return res, nil
 	}

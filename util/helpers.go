@@ -247,20 +247,32 @@ func Implode(glue string, pieces []string) string {
 	return buf.String()
 }
 
-// IP2long ip2long()
-// IPv4
-func IP2long(ipAddress string) uint32 {
+// IP2long ip转整型
+func IP2long(ipAddress string) uint64 {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
 		return 0
 	}
-	return binary.BigEndian.Uint32(ip.To4())
+	isIpv6 := false
+	for _, v := range ipAddress {
+		switch v {
+		case '.':
+			break
+		case ':':
+			isIpv6 = false
+			break
+		}
+	}
+	if isIpv6 {
+		return binary.BigEndian.Uint64(ip.To16())
+	}
+	return binary.BigEndian.Uint64(ip.To4())
 }
 
 // Long2Ip 整型转ip
-func Long2Ip(ipLong uint32) string {
+func Long2Ip(ipLong uint64) string {
 	ipByte := make([]byte, 4)
-	binary.BigEndian.PutUint32(ipByte, ipLong)
+	binary.BigEndian.PutUint64(ipByte, ipLong)
 	ip := net.IP(ipByte)
 	return ip.String()
 }

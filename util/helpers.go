@@ -3,7 +3,6 @@ package util
 import (
 	"bytes"
 	"crypto/md5"
-	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"github.com/bwmarrin/snowflake"
@@ -13,6 +12,7 @@ import (
 	"gorm.io/gorm"
 	"io"
 	"math"
+	"math/big"
 	"math/rand"
 	"net"
 	"net/http"
@@ -248,31 +248,31 @@ func Implode(glue string, pieces []string) string {
 }
 
 // IP2long ip转整型
-func IP2long(ipAddress string) uint64 {
+func IP2long(ipAddress string) *big.Int {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
-		return 0
+		return nil
 	}
-	isIpv6 := false
-	for _, v := range ipAddress {
-		switch v {
+	isIPv6 := false
+	for i := 0; i < len(ipAddress); i++ {
+		switch ipAddress[i] {
 		case '.':
 			break
 		case ':':
-			isIpv6 = true
+			isIPv6 = true
 			break
 		}
 	}
-	if isIpv6 {
-		return binary.BigEndian.Uint64(ip.To16())
+	ipInt := big.NewInt(0)
+	if isIPv6 {
+		return ipInt.SetBytes(ip.To16())
 	}
-	return uint64(binary.BigEndian.Uint32(ip.To4()))
+	return ipInt.SetBytes(ip.To4())
 }
 
 // Long2Ip 整型转ip
-func Long2Ip(ipLong uint64) string {
-	ipByte := make([]byte, 8)
-	binary.BigEndian.PutUint64(ipByte, ipLong)
+func Long2Ip(ipLong *big.Int) string {
+	ipByte := ipLong.Bytes()
 	ip := net.IP(ipByte)
 	return ip.String()
 }

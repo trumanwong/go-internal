@@ -271,7 +271,7 @@ func IP2long(ipAddress string) uint64 {
 
 // Long2Ip 整型转ip
 func Long2Ip(ipLong uint64) string {
-	ipByte := make([]byte, 4)
+	ipByte := make([]byte, 8)
 	binary.BigEndian.PutUint64(ipByte, ipLong)
 	ip := net.IP(ipByte)
 	return ip.String()

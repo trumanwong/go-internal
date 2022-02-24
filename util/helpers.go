@@ -259,14 +259,14 @@ func IP2long(ipAddress string) uint64 {
 		case '.':
 			break
 		case ':':
-			isIpv6 = false
+			isIpv6 = true
 			break
 		}
 	}
 	if isIpv6 {
 		return binary.BigEndian.Uint64(ip.To16())
 	}
-	return binary.BigEndian.Uint64(ip.To4())
+	return uint64(binary.BigEndian.Uint32(ip.To4()))
 }
 
 // Long2Ip 整型转ip

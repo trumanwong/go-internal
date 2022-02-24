@@ -247,8 +247,8 @@ func Implode(glue string, pieces []string) string {
 	return buf.String()
 }
 
-// IP2long ip转整型
-func IP2long(ipAddress string) *big.Int {
+// IP2Long ip转整型
+func IP2Long(ipAddress string) *big.Int {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
 		return nil

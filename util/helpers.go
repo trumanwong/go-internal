@@ -277,6 +277,34 @@ func Long2Ip(ipLong *big.Int) string {
 	return ip.String()
 }
 
+// IP2Byte ip转byte数组
+func IP2Byte(ipAddress string) []byte {
+	ip := net.ParseIP(ipAddress)
+	if ip == nil {
+		return nil
+	}
+	isIPv6 := false
+	for i := 0; i < len(ipAddress); i++ {
+		switch ipAddress[i] {
+		case '.':
+			break
+		case ':':
+			isIPv6 = true
+			break
+		}
+	}
+	if isIPv6 {
+		return ip.To16()
+	}
+	return ip.To4()
+}
+
+// Byte2Ip byte数组转ip
+func Byte2Ip(ipBytes []byte) string {
+	ip := net.IP(ipBytes)
+	return ip.String()
+}
+
 // GenerateUUID 生成uuid
 func GenerateUUID() string {
 	return uuid.NewString()

@@ -36,6 +36,7 @@ func (this *RabbitMQ) CheckIsClosed() bool {
 func (this *RabbitMQ) NewChannel() (*amqp.Channel, error) {
 	ch, err := this.conn.Channel()
 	if err != nil {
+		var conn *amqp.Connection
 		count := 0
 		for err.Error() == amqp.ErrClosed.Error() {
 			count++
@@ -44,9 +45,10 @@ func (this *RabbitMQ) NewChannel() (*amqp.Channel, error) {
 			}
 			time.Sleep(time.Second)
 			// 判断是否关闭，如果关闭，重连
-			this.conn, err = amqp.Dial(this.url)
+			conn, err = amqp.Dial(this.url)
 		}
 		if err == nil {
+			this.conn = conn
 			ch, err = this.conn.Channel()
 			if err != nil {
 				return nil, err

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/streadway/amqp"
+	"time"
 )
 
 type RabbitMQ struct {
@@ -33,16 +34,24 @@ func (this *RabbitMQ) CheckIsClosed() bool {
 }
 
 func (this *RabbitMQ) NewChannel() (*amqp.Channel, error) {
-	if this.conn.IsClosed() {
-		// 判断是否关闭，如果关闭，重连
-		conn, err := amqp.Dial(this.url)
-		if err != nil {
-			return nil, err
-		}
-		this.conn = conn
-	}
 	ch, err := this.conn.Channel()
 	if err != nil {
+		count := 0
+		for err.Error() == "AMQP scheme must be either 'amqp://' or 'amqps://'" {
+			count++
+			if count > 3 {
+				break
+			}
+			time.Sleep(time.Second)
+			// 判断是否关闭，如果关闭，重连
+			this.conn, err = amqp.Dial(this.url)
+		}
+		if err == nil {
+			ch, err = this.conn.Channel()
+			if err != nil {
+				return nil, err
+			}
+		}
 		return nil, err
 	}
 	return ch, nil

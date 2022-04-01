@@ -22,7 +22,7 @@ func NewRabbitMQ(url string) (*RabbitMQ, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &RabbitMQ{conn: conn}, nil
+	return &RabbitMQ{conn: conn, url: url}, nil
 }
 
 func (this *RabbitMQ) Close() {

@@ -37,7 +37,7 @@ func (this *RabbitMQ) NewChannel() (*amqp.Channel, error) {
 	ch, err := this.conn.Channel()
 	if err != nil {
 		count := 0
-		for err.Error() == "AMQP scheme must be either 'amqp://' or 'amqps://'" {
+		for err.Error() == amqp.ErrClosed.Error() {
 			count++
 			if count > 3 {
 				break
